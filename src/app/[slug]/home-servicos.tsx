@@ -32,6 +32,12 @@ function formatarDuracao(min: number) {
   return m ? `${h}h${String(m).padStart(2, "0")}` : `${h}h`;
 }
 
+// Sem foto real do serviço, a capa do card é uma peça de marca: um azul-navy
+// suave (mesma família do painel do admin) com a marca Astro centralizada.
+// Transição curta, sem cair para o preto.
+const CAPA_FUNDO =
+  "radial-gradient(130% 110% at 50% -10%, #2e4585 0%, #1a2c58 45%, #101a36 100%)";
+
 // Tela 06 — seletor de segmento (preview de precos, RF04) + cards de servico.
 export function HomeServicos({
   slug,
@@ -104,11 +110,22 @@ export function HomeServicos({
         {servicos.map((servico) => (
           <div
             key={servico.id}
-            className="flex w-56 shrink-0 flex-col overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-sm transition lg:w-auto lg:shrink lg:hover:-translate-y-0.5 lg:hover:shadow-md"
+            className="flex w-56 shrink-0 flex-col overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-[0_2px_14px_-6px_rgba(15,23,42,0.18)] transition duration-200 lg:w-auto lg:shrink lg:hover:-translate-y-1 lg:hover:border-astro-blue/20 lg:hover:shadow-[0_22px_44px_-18px_rgba(37,99,235,0.4)]"
           >
-            {/* Imagem placeholder com badge de duracao */}
-            <div className="relative flex h-36 items-end bg-gradient-to-br from-astro-surface-2 to-astro-bg p-3 lg:h-44">
-              <span className="flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
+            {/* Capa de marca (não há foto do serviço) + badge de duração. */}
+            <div
+              className="relative flex h-36 items-end overflow-hidden p-3 lg:h-44"
+              style={{ backgroundImage: CAPA_FUNDO }}
+            >
+              {/* Marca Astro centralizada, em marca-d'água. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-astro-branco.png"
+                alt=""
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 w-36 -translate-x-1/2 -translate-y-1/2 select-none opacity-20"
+              />
+              <span className="relative flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
                 <Clock className="h-3 w-3" />
                 {formatarDuracao(servico.duracaoMin)}
               </span>
